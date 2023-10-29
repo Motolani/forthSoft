@@ -33,16 +33,16 @@ class IPController extends Controller
             $user = $userExists->first();
             $ip = IP::where('user_id', $user->id);
 
-            if($ip->exists()){
-                $ip->update([
-                    'ip' => $request->ip
-                ]);
-            }else{  
+            // if($ip->exists()){
+            //     $ip->update([
+            //         'ip' => $request->ip
+            //     ]);
+            // }else{  
                 $ip = new IP();
                 $ip->user_id = $user->id;
                 $ip->ip = $request->ip;
                 $ip->save();
-            }
+            // }
             return response()->json([
                 'status' => 200,
                 'message' => 'IP Successfully Whitelisted',
@@ -55,7 +55,99 @@ class IPController extends Controller
         }
     }
 
-    public function deleteIP(Request $request)
+    public function updateWhiteListedIP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'  => "required",
+            'ip'  => "required|ip",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        $userExists = User::where('email', $request->email);
+        if($userExists->exists()){
+            $user = $userExists->first();
+            $ip = IP::where('user_id', $user->id)->where('ip', $request->ip);
+            if($ip->exists()){
+
+                $ip->update([
+                    'ip' => $request->ip
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'IP Successfully Updated',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Invalid IP',
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid User',
+            ]);
+        }
+    }
+
+    public function viewWhitelistedIP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'  => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        $userExists = User::where('email', $request->email);
+        if($userExists->exists()){
+            $user = $userExists->first();
+            $userId = $user->id;
+
+            $ipRow = IP::where('user_id	', $userId);
+            if($ipRow->exists()){
+                $ips = $ipRow->get();
+
+                $ipAddresses = []; 
+                foreach($ips as $ip){
+                    array_push($ipAddresses,$ip->ip);
+                }
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Ip Lists',
+                    'data' => $ipAddresses
+                ]);
+            }else{
+                return response()->json([
+                    'status' => 201,
+                    'message' => 'No Ip Whitelisted',
+                    'data' => ''
+                ]);
+            }
+
+        }else{
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid User',
+            ]);
+        }
+
+    }
+
+    public function deleteWhitelistedIP(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email'  => "required",
@@ -90,6 +182,5 @@ class IPController extends Controller
 
     }
 
-    //view Ip
-    //edit Ip
+
 }
