@@ -26,5 +26,7 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
     Route::post('/changePassword', [LoginController::class, 'changePassword']);
     Route::post('/changeApiKey', [LoginController::class, 'changeApiKey']);
     Route::post('/whitelistIP', [IPController::class, 'whiteListIP']);
-    Route::post('/deleteIP', [IPController::class, 'whiteListIP']);
+    Route::post('/deleteIP', [IPController::class, 'deleteWhitelistedIP']);
+    Route::post('/viewIpList', [IPController::class, 'viewWhitelistedIP']);
+    Route::post('/updateIpList', [IPController::class, 'updateWhiteListedIP']);
 });
