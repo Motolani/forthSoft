@@ -47,6 +47,7 @@ class LoginController extends Controller
                         'message' => 'Login Succcessful',
                         'data' => [
                             'token' => $token,
+                            'apiKey' => $potentialUser->apiKey,
                             'name' => $potentialUser->name,
                             'email' => $potentialUser->email,
                         ]
@@ -54,7 +55,7 @@ class LoginController extends Controller
                 }else{
                     return response()->json([
                         'status' => 401,
-                        'error'=>'Unauthorised'
+                        'message'=>'Unauthorised'
                     ]); 
                 }
             }else{
