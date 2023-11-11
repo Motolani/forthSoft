@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IPController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ServicesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,11 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
     Route::get('/viewIpList', [IPController::class, 'viewWhitelistedIP']);
     Route::post('/updateIpList', [IPController::class, 'updateWhiteListedIP']);
 
-    
+
+    Route::post('/services', [ServicesController::class, 'getServices']);
+    Route::post('/keywords', [ServicesController::class, 'getKeyword']);
+    Route::post('/getPricePoint', [ServicesController::class, 'getPricePoint']);
+
+
 
 });
