@@ -15,6 +15,8 @@ class LoginController extends Controller
     //
     public function login(Request $request)
     {
+        Log::info('IP');
+        Log::info($request->ip());
         Log::info(Hash::make('password'));
         $validator = Validator::make($request->all(), [
             'email'  => "required",
@@ -153,5 +155,38 @@ class LoginController extends Controller
             ]);
         }
     
+    }
+
+    public function getUserDetails(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email'  => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        $userCheck = User::where('email', $request->email);
+        if($userCheck->exists())
+        {
+            $user = $userCheck->first();
+
+            $data = [
+                'name' => $user->name,
+                'email' => $user->email,
+                'apiKey' => $user->apiKey,
+                'token' => $user->token,
+                'created' => $user->created_at,
+            ];
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'ApiKey Successfully Changed',
+                'data' => $data
+            ]);
+        }   
     }
 }

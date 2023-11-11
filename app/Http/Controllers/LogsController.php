@@ -35,6 +35,9 @@ class LogsController extends Controller
             $logRequest = new LogRequest();
             $logRequest->search_type = $request->type;
             $logRequest->user_id = $user->id;
+            $logRequest->fro = $request->fro;
+            $logRequest->to = $request->to;
+
         }else{
             return response()->json([
                 'status' => 400,

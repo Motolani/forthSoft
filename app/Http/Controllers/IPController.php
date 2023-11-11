@@ -33,16 +33,11 @@ class IPController extends Controller
             $user = $userExists->first();
             $ip = IP::where('user_id', $user->id);
 
-            // if($ip->exists()){
-            //     $ip->update([
-            //         'ip' => $request->ip
-            //     ]);
-            // }else{  
                 $ip = new IP();
                 $ip->user_id = $user->id;
                 $ip->ip = $request->ip;
                 $ip->save();
-            // }
+
             return response()->json([
                 'status' => 200,
                 'message' => 'IP Successfully Whitelisted',
@@ -59,7 +54,8 @@ class IPController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email'  => "required",
-            'ip'  => "required|ip",
+            'old_ip'  => "required|ip",
+            'new_ip'  => "required|ip",
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -72,11 +68,11 @@ class IPController extends Controller
         $userExists = User::where('email', $request->email);
         if($userExists->exists()){
             $user = $userExists->first();
-            $ip = IP::where('user_id', $user->id)->where('ip', $request->ip);
+            $ip = IP::where('user_id', $user->id)->where('ip', $request->old_ip);
             if($ip->exists()){
 
                 $ip->update([
-                    'ip' => $request->ip
+                    'ip' => $request->new_ip
                 ]);
 
                 return response()->json([
@@ -103,6 +99,7 @@ class IPController extends Controller
         $validator = Validator::make($request->all(), [
             'email'  => "required",
         ]);
+
         if ($validator->fails()) {
             return response()->json([
                 'required_fields' => $validator->errors()->all(),
@@ -116,7 +113,7 @@ class IPController extends Controller
             $user = $userExists->first();
             $userId = $user->id;
 
-            $ipRow = IP::where('user_id	', $userId);
+            $ipRow = IP::where('user_id', $userId);
             if($ipRow->exists()){
                 $ips = $ipRow->get();
 
