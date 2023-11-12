@@ -60,23 +60,6 @@ class ServicesController extends Controller
                     'data' => []
                 ]);
             }
-        }elseif(isset($request->keyword)){
-            $serv = Service::where('keyword', $request->keyword);
-            if($serv->exists()){
-                $services = $serv->get();
-
-                return response()->json([
-                    'message' => 'Successful',
-                    'status' => '200',
-                    'data' => $services
-                ]);
-            }else{
-                return response()->json([
-                    'message' => 'Successful',
-                    'status' => '200',
-                    'data' => []
-                ]);
-            }
         }elseif(isset($request->price_point)){
 
             

@@ -36,7 +36,7 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
 
     Route::post('/services', [ServicesController::class, 'getServices']);
     Route::post('/keywords', [ServicesController::class, 'getKeyword']);
-    Route::post('/getPricePoint', [ServicesController::class, 'getPricePoint']);
+    Route::post('/pricePoint', [ServicesController::class, 'getPricePoint']);
 
 
 
