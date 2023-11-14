@@ -41,6 +41,7 @@ class ServicesController extends Controller
                 return response()->json([
                     'message' => 'Network Does not exist',
                     'status' => '300',
+                    'data' => [],
                 ]);
             }
         }elseif(isset($request->keyword)){
@@ -102,7 +103,8 @@ class ServicesController extends Controller
             return response()->json([
                 'required_fields' => $validator->errors()->all(),
                 'message' => 'Missing field(s)',
-                'status' => '500'
+                'status' => '500',
+                'data' => []
             ]);
         }
 
@@ -119,9 +121,9 @@ class ServicesController extends Controller
             ]);
         }else{
             return response()->json([
-                'message' => 'Failed',
+                'message' => 'Invalid Keyword',
                 'status' => '300',
-                'data' => 'Invalid Keyword'
+                'data' => []
             ]);
         }
     }
@@ -149,15 +151,16 @@ class ServicesController extends Controller
                     ]);
                 }else{
                     return response()->json([
-                        'message' => 'Failed',
+                        'message' => 'Invalid Keyword',
                         'status' => '300',
-                        'data' => 'Invalid Keyword'
+                        'data' => []
                     ]);
                 }
             }else{
                 return response()->json([
                     'message' => 'Network Does not exist',
                     'status' => '300',
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->price)){
@@ -176,9 +179,9 @@ class ServicesController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Price',
                     'status' => '300',
-                    'data' => 'Invalid Price'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->service)){
@@ -201,16 +204,16 @@ class ServicesController extends Controller
                     ]);
                 }else{
                     return response()->json([
-                        'message' => 'Failed',
+                        'message' => 'Invalid service',
                         'status' => '300',
-                        'data' => 'Invalid service'
+                        'data' => []
                     ]);
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid service',
                     'status' => '300',
-                    'data' => 'Invalid service'
+                    'data' => []
                 ]);
             }
         }else{
@@ -253,6 +256,7 @@ class ServicesController extends Controller
                 return response()->json([
                     'message' => 'Network Does not exist',
                     'status' => '300',
+                    'data' => []
                 ]);
             }
         }else{
@@ -275,9 +279,9 @@ class ServicesController extends Controller
                 $channel_id = $channel->id;
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Channel',
                         'status' => '300',
-                        'data' => 'Invalid Channel'
+                        'data' => []
                 ]);
             }
 
@@ -295,9 +299,9 @@ class ServicesController extends Controller
 
             }else{
                 return response()->json([
-                    'message' => 'Failed',
-                        'status' => '300',
-                        'data' => 'Invalid Channel'
+                    'message' => 'Invalid Channel',
+                    'status' => '300',
+                    'data' => []
                 ]);
             }
         }else{

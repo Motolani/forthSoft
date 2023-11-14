@@ -57,13 +57,15 @@ class LoginController extends Controller
                 }else{
                     return response()->json([
                         'status' => 401,
-                        'message'=>'Unauthorised'
+                        'message'=>'Unauthorised',
+                        'data' => []
                     ]); 
                 }
             }else{
                 return response()->json([
                     'status' => 400,
                     'message' => 'Invalid User',
+                    'data' => []
                 ]);
             }
             
@@ -152,6 +154,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Invalid User',
+                'data' => []
             ]);
         }
     

@@ -41,9 +41,9 @@ class SubscribersController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Service not Found',
                     'status' => '300',
-                    'data' => 'Service not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->network)){
@@ -71,9 +71,9 @@ class SubscribersController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Network does not exist',
                     'status' => '300',
-                    'data' => 'Network does not exist'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
@@ -88,9 +88,9 @@ class SubscribersController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Subscriber does not exist',
                     'status' => '300',
-                    'data' => 'Subscriber does not exist'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->to) && isset($request->fro)){
@@ -121,9 +121,9 @@ class SubscribersController extends Controller
                 $network_id = $network->id;
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Network',
                     'status' => '300',
-                    'data' => 'Invalid Network'
+                    'data' => []
                 ]);
             }
 
@@ -134,9 +134,9 @@ class SubscribersController extends Controller
 
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Service',
                     'status' => '300',
-                    'data' => 'Invalid Service'
+                    'data' => []
                 ]);
             }
 
@@ -151,9 +151,9 @@ class SubscribersController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Subscribers',
                     'status' => '300',
-                    'data' => 'No Subscribers'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->channel)){
@@ -185,9 +185,9 @@ class SubscribersController extends Controller
                     }
                 }else{
                     return response()->json([
-                        'message' => 'Failed',
+                        'message' => 'Service Not found',
                         'status' => '300',
-                        'data' => 'Service Not found'
+                        'data' => []
                     ]);
                 }
             }
@@ -196,7 +196,7 @@ class SubscribersController extends Controller
             return response()->json([
                 'message' => 'Choose a parameter',
                 'status' => '500',
-                'data' => ''
+                'data' => []
             ]);
         }
     }
@@ -231,9 +231,9 @@ class SubscribersController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Service not Found',
                     'status' => '300',
-                    'data' => 'Service not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->network)){
@@ -261,9 +261,9 @@ class SubscribersController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Network does not exist',
                     'status' => '300',
-                    'data' => 'Network does not exist'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
@@ -278,9 +278,9 @@ class SubscribersController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Subscriber does not exist',
                     'status' => '300',
-                    'data' => 'Subscriber does not exist'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->to) && isset($request->fro)){
@@ -311,13 +311,11 @@ class SubscribersController extends Controller
                 $network = $net->first();
                 $network_id = $network->id;
 
-                // $sub = Unsubscriber::where('network_id', $network_id);
-
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Network',
                     'status' => '300',
-                    'data' => 'Invalid Network'
+                    'data' => []
                 ]);
 
             }
@@ -330,9 +328,9 @@ class SubscribersController extends Controller
                 $service_cp_id = $service->user_id;
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Invalid Service',
                     'status' => '300',
-                    'data' => 'Invalid Service'
+                    'data' => []
                 ]);
             }
 
@@ -347,9 +345,9 @@ class SubscribersController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Subscribers',
                     'status' => '300',
-                    'data' => 'No Subscribers'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->channel)){
@@ -392,9 +390,9 @@ class SubscribersController extends Controller
                     }
                 }else{
                     return response()->json([
-                        'message' => 'Failed',
+                        'message' => 'Service Not found',
                         'status' => '300',
-                        'data' => 'Service Not found'
+                        'data' => []
                     ]);
                 }
             }
@@ -402,7 +400,7 @@ class SubscribersController extends Controller
             return response()->json([
                 'message' => 'Choose a parameter',
                 'status' => '500',
-                'data' => ''
+                'data' => []
             ]);
         }
     }
@@ -435,7 +433,7 @@ class SubscribersController extends Controller
                 return response()->json([
                     'message' => 'Successful',
                     'status' => '200',
-                    'data' => ''
+                    'data' => []
                 ]);
             }
     }
@@ -467,7 +465,7 @@ class SubscribersController extends Controller
             return response()->json([
                 'message' => 'Successful',
                 'status' => '200',
-                'data' => ''
+                'data' => []
             ]);
         }
     }
