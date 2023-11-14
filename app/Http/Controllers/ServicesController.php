@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Network;
 use App\Models\PricePoint;
 use App\Models\Service;
+use App\Models\ServiceChannel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,6 @@ class ServicesController extends Controller
 {
     //services
     public function getServices(Request $request){
-        //validate inputs
         if(isset($request->network)){
             $net = Network::where('network', $request->network);
             if($net->exists()){
@@ -212,4 +212,94 @@ class ServicesController extends Controller
             ]);
         }
     }
+
+    //validate methods
+    public function countServices(Request $request){
+        if(isset($request->network)){
+            $net = Network::where('network', $request->network);
+            if($net->exists()){
+                $network = $net->first();
+
+                $serv = Service::where('network_id', $network->id);
+                if($serv->exists()){
+                    $servicesCount = $serv->count();
+
+                    return response()->json([
+                        'message' => 'Successful',
+                        'status' => '200',
+                        'data' => $servicesCount
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => 'Successful',
+                        'status' => '200',
+                        'data' => []
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'message' => 'Network Does not exist',
+                    'status' => '300',
+                ]);
+            }
+        }else{
+
+            $servicesCount = Service::get()->count();
+
+                return response()->json([
+                    'message' => 'Successful',
+                    'status' => '200',
+                    'data' => $servicesCount
+                ]);
+        }
+    }
+
+    public function serviceChannels(Request $request){
+        if(isset($request->channel)){
+            $chan = DB::table('channel')->where('channel', $request->channel);
+            if($chan->exists()){
+                $channel = $chan->first();
+                $channel_id = $channel->id;
+            }else{
+                return response()->json([
+                    'message' => 'Failed',
+                        'status' => '300',
+                        'data' => 'Invalid Channel'
+                ]);
+            }
+
+            $serv = Service::join('service_channel_table','service_channel_table.service_id','services.id')
+                ->where('service_channel_table.channel', $channel_id);
+                
+            if($serv->exists()){
+                $servicesChannels = $serv->select('services.*', )->get();
+
+                    return response()->json([
+                        'message' => 'Successful',
+                        'status' => '200',
+                        'data' => $servicesChannels
+                    ]);
+
+            }else{
+                return response()->json([
+                    'message' => 'Failed',
+                        'status' => '300',
+                        'data' => 'Invalid Channel'
+                ]);
+            }
+        }else{
+            
+            $servicesChannels = ServiceChannel::join('services','services.id','service_channel_table.service_id')
+                            ->join('channel_table','channel_table.id','service_channel_table.channel_id')
+                            ->select('services.*', 'channel_table.channel')->get();
+
+            return response()->json([
+                'message' => 'Successful',
+                'status' => '200',
+                'data' => $servicesChannels
+            ]);
+        }
+    }
+
+    
 }

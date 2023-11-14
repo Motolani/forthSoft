@@ -3,6 +3,8 @@
 use App\Http\Controllers\IPController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\SubscribersController;
+use App\Models\Subscriber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +39,14 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
     Route::post('/services', [ServicesController::class, 'getServices']);
     Route::post('/keywords', [ServicesController::class, 'getKeyword']);
     Route::post('/pricePoint', [ServicesController::class, 'getPricePoint']);
+    Route::post('/serviceCount', [ServicesController::class, 'countServices']);
+    Route::post('/serviceChannels', [ServicesController::class, 'serviceChannels']);
+
+    Route::post('/subscribers', [SubscribersController::class, 'getSubscribers']);
+    Route::post('/subscribersCount', [SubscribersController::class, 'subscribersCount']);
+    Route::post('/unsubscribers', [SubscribersController::class, 'getUnsubscribers']);
+    Route::post('/unsubscribersCount', [SubscribersController::class, 'unsubscribersCount']);
+
 
 
 
