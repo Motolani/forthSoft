@@ -129,14 +129,18 @@ class ServicesController extends Controller
     public function getPricePoint(Request $request){
         //validate inputs
         if(isset($request->keyword)){
+
+            
             $key = DB::table('keyword')->where('name', $request->keyword);
 
             if($key->exists()){
                 $keyword = $key->first();
 
-                $priceCheck = PricePoint::where('keyword_id', $keyword->id);
+                $priceCheck = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
+                ->where('price_point_table.keyword_id', $keyword->id);
+
                 if($priceCheck->exists()){
-                    $pricePoint = $priceCheck->first();
+                    $pricePoint = $priceCheck->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -157,9 +161,13 @@ class ServicesController extends Controller
                 ]);
             }
         }elseif(isset($request->price)){
-            $priceCheck = PricePoint::where('price', $request->price);
+
+            $priceCheck = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
+                ->where('price_point_table.price', $request->price);
+
             if($priceCheck->exists()){
-                $pricePoint = $priceCheck->first();
+                $pricePoint = $priceCheck->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')->get();
+
 
                 return response()->json([
                     'message' => 'Successful',
@@ -178,10 +186,13 @@ class ServicesController extends Controller
             if($serv->exists()){
                 $services = $serv->first();
 
-                $pp = PricePoint::where('service_id', $services->id);
+
+                $pp = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
+                ->where('price_point_table.service_id', $services->id);
+                
 
                 if($pp->exists()){
-                    $pricePoint = $pp->first();
+                    $pricePoint = $pp->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -203,7 +214,9 @@ class ServicesController extends Controller
                 ]);
             }
         }else{
-            $pricePoint = PricePoint::all();
+           $pricePoint = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
+            ->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')
+            ->get();
 
             return response()->json([
                 'message' => 'Successful',
@@ -301,5 +314,5 @@ class ServicesController extends Controller
         }
     }
 
-    
+
 }
