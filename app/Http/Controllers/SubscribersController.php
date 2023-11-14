@@ -196,7 +196,7 @@ class SubscribersController extends Controller
             return response()->json([
                 'message' => 'Choose a parameter',
                 'status' => '500',
-                'data' => 'Service Not found'
+                'data' => ''
             ]);
         }
     }
@@ -402,7 +402,7 @@ class SubscribersController extends Controller
             return response()->json([
                 'message' => 'Choose a parameter',
                 'status' => '500',
-                'data' => 'Service Not found'
+                'data' => ''
             ]);
         }
     }

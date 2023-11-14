@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChargingController;
 use App\Http\Controllers\IPController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ServicesController;
@@ -32,7 +33,7 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
 
     Route::post('/whitelistIP', [IPController::class, 'whiteListIP']);
     Route::post('/deleteIP', [IPController::class, 'deleteWhitelistedIP']);
-    Route::get('/viewIpList', [IPController::class, 'viewWhitelistedIP']);
+    Route::post('/viewIpList', [IPController::class, 'viewWhitelistedIP']);
     Route::post('/updateIpList', [IPController::class, 'updateWhiteListedIP']);
 
 
@@ -47,7 +48,10 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
     Route::post('/unsubscribers', [SubscribersController::class, 'getUnsubscribers']);
     Route::post('/unsubscribersCount', [SubscribersController::class, 'unsubscribersCount']);
 
-
+    Route::post('/chargingSync', [ChargingController::class, 'chargingSync']);
+    Route::post('/chargingUnsync', [ChargingController::class, 'chargingUnsync']);
+    Route::post('/chargingSyncCount', [ChargingController::class, 'chargingSyncCount']);
+    Route::post('/chargingUnsyncCount', [ChargingController::class, 'chargingUnsyncCount']);
 
 
 });
