@@ -22,7 +22,7 @@ class ChargingController extends Controller
 
                 $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 2);
                 if($char->exists()){
-                    $charging = $char->first();
+                    $charging = $char->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -39,9 +39,9 @@ class ChargingController extends Controller
                 
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Service not Found',
                     'status' => '300',
-                    'data' => 'Service not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->network)){
@@ -52,7 +52,7 @@ class ChargingController extends Controller
 
                 $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 2);
                 if($charg->exists()){
-                    $charging = $charg->first();
+                    $charging = $charg->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -68,9 +68,9 @@ class ChargingController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Network not Found',
                     'status' => '300',
-                    'data' => 'Network not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
@@ -85,9 +85,9 @@ class ChargingController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Record Found',
                     'status' => '300',
-                    'data' => 'No Record Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->bearerId)){
@@ -102,9 +102,9 @@ class ChargingController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Record Found',
                     'status' => '300',
-                    'data' => 'No Record Found'
+                    'data' => []
                 ]);
             }
         }else{
@@ -126,7 +126,7 @@ class ChargingController extends Controller
 
                 $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 0)->orWhere('status', 1);
                 if($char->exists()){
-                    $charging = $char->first();
+                    $charging = $char->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -143,9 +143,9 @@ class ChargingController extends Controller
                 
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Service not Found',
                     'status' => '300',
-                    'data' => 'Service not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->network)){
@@ -156,7 +156,7 @@ class ChargingController extends Controller
 
                 $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 0)->orWhere('status', 1);
                 if($charg->exists()){
-                    $charging = $charg->first();
+                    $charging = $charg->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -172,9 +172,9 @@ class ChargingController extends Controller
                 }
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'Network not Found',
                     'status' => '300',
-                    'data' => 'Network not Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
@@ -189,9 +189,9 @@ class ChargingController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Record Found',
                     'status' => '300',
-                    'data' => 'No Record Found'
+                    'data' => []
                 ]);
             }
         }elseif(isset($request->bearerId)){
@@ -206,16 +206,16 @@ class ChargingController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'message' => 'Failed',
+                    'message' => 'No Record Found',
                     'status' => '300',
-                    'data' => 'No Record Found'
+                    'data' => []
                 ]);
             }
         }else{
             return response()->json([
                 'message' => 'Choose a parameter',
                 'status' => '500',
-                'data' => ''
+                'data' => []
             ]);
         }
     }
