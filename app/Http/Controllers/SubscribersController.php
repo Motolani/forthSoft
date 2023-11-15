@@ -25,6 +25,8 @@ class SubscribersController extends Controller
             if($serv->exists()){
                 $service = $serv->first();
 
+                Log::info($service->id);
+
                 $subs = Subscriber::where('service_id', $service->id)->where('user_id', $user_id);
                 if($subs->exists()){
                     $subscribers = $subs->get();
@@ -56,7 +58,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Subscriber::where('network_id', $request->network)->where('user_id', $user_id);
+                $sub = Subscriber::where('network_id', $$network->id)->where('user_id', $user_id);
                 if($sub->exists()){
                     $subscribers = $sub->get();
 
@@ -248,7 +250,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Unsubscriber::where('network_id', $request->network);
+                $sub = Unsubscriber::where('network_id', $network->id);
                 if($sub->exists()){
                     $unsubscribers = $sub->get();
 
