@@ -29,6 +29,7 @@ class LogsController extends Controller
                 'status' => '500'
             ]);
         }
+        
         $userExists = User::where('email', $request->email);
         if($userExists->exists()){
             $user = $userExists->first();

@@ -14,13 +14,13 @@ class ChargingController extends Controller
     //
     public function chargingSync(Request $request){
         if(isset($request->service)){
-            $serv = Service::where('serviceName', $request->service);
+            $serv = Service::where('serviceName',  'LIKE', '%'.$request->service.'%');
             if($serv->exists()){
                 $service = $serv->first();
                 $service_id = $service->id;
                 $telcoServiceId = $service->serviceId;
 
-                $char = Charging::where('serviceId', $telcoServiceId)->where('status', 2);
+                $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 2);
                 if($char->exists()){
                     $charging = $char->first();
 
@@ -45,12 +45,12 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->network)){
-            $net = Network::where('network', $request->network);
+            $net = Network::where('network',  'LIKE', '%'.$request->network.'%');
             if($net->exists()){
                 $network = $net->first();
                 $network_id = $network->id;
 
-                $charg = Charging::where('network_id', $network_id)->where('status', 2);
+                $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 2);
                 if($charg->exists()){
                     $charging = $charg->first();
 
@@ -74,7 +74,7 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
-            $charg = Charging::where('callingParty', $request->subscriber_id)->where('status', 2);
+            $charg = Charging::where('callingParty',  'LIKE', '%'.$request->subscriber_id.'%')->where('status', 2);
             if($charg->exists()){
                 $charging = $charg->get();
 
@@ -91,7 +91,7 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->bearerId)){
-            $charg = Charging::where('bearerId', $request->bearerId)->where('status', 2);
+            $charg = Charging::where('bearerId',  'LIKE', '%'.$request->bearerId.'%')->where('status', 2);
             if($charg->exists()){
                 $charging = $charg->get();
 
@@ -118,13 +118,13 @@ class ChargingController extends Controller
 
     public function chargingUnsync(Request $request){
         if(isset($request->service)){
-            $serv = Service::where('serviceName', $request->service);
+            $serv = Service::where('serviceName',  'LIKE', '%'.$request->service.'%');
             if($serv->exists()){
                 $service = $serv->first();
                 $service_id = $service->id;
                 $telcoServiceId = $service->serviceId;
 
-                $char = Charging::where('serviceId', $telcoServiceId)->where('status', 0)->orWhere('status', 1);
+                $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 0)->orWhere('status', 1);
                 if($char->exists()){
                     $charging = $char->first();
 
@@ -149,12 +149,12 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->network)){
-            $net = Network::where('network', $request->network);
+            $net = Network::where('network',  'LIKE', '%'.$request->network.'%');
             if($net->exists()){
                 $network = $net->first();
                 $network_id = $network->id;
 
-                $charg = Charging::where('network_id', $network_id)->where('status', 0)->orWhere('status', 1);
+                $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 0)->orWhere('status', 1);
                 if($charg->exists()){
                     $charging = $charg->first();
 
@@ -178,7 +178,7 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->subscriber_id)){
-            $charg = Charging::where('callingParty', $request->subscriber_id)->where('status', 0)->orWhere('status', 1);
+            $charg = Charging::where('callingParty',  'LIKE', '%'.$request->subscriber_id.'%')->where('status', 0)->orWhere('status', 1);
             if($charg->exists()){
                 $charging = $charg->get();
 
@@ -195,7 +195,7 @@ class ChargingController extends Controller
                 ]);
             }
         }elseif(isset($request->bearerId)){
-            $charg = Charging::where('bearerId', $request->bearerId)->where('status', 0)->orWhere('status', 1);
+            $charg = Charging::where('bearerId',  'LIKE', '%'.$request->bearerId.'%')->where('status', 0)->orWhere('status', 1);
             if($charg->exists()){
                 $charging = $charg->get();
 
