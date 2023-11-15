@@ -58,7 +58,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Subscriber::where('network_id', $$network->id)->where('user_id', $user_id);
+                $sub = Subscriber::where('network_id', $network->id)->where('user_id', $user_id);
                 if($sub->exists()){
                     $subscribers = $sub->get();
 
