@@ -25,7 +25,7 @@ class SubscribersController extends Controller
             if($serv->exists()){
                 $service = $serv->first();
 
-                $subs = Subscriber::where('service_id', 'LIKE', '%'.$service->id.'%')->where('user_id', $user_id);
+                $subs = Subscriber::where('service_id', $service->id)->where('user_id', $user_id);
                 if($subs->exists()){
                     $subscribers = $subs->get();
 
@@ -56,7 +56,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Subscriber::where('network_id', 'LIKE', '%'.$request->network.'%')->where('user_id', $user_id);
+                $sub = Subscriber::where('network_id', $request->network)->where('user_id', $user_id);
                 if($sub->exists()){
                     $subscribers = $sub->get();
 
@@ -143,7 +143,7 @@ class SubscribersController extends Controller
                 ]);
             }
 
-            $sub = Subscriber::where('network_id', 'LIKE', '%'.$network_id.'%')->where('service_id', 'LIKE', '%'.$service_id.'%')->where('user_id', $user_id);
+            $sub = Subscriber::where('network_id', $network_id)->where('service_id', $service_id)->where('user_id', $user_id);
             if($sub->exists()){
                 $subscribers = $sub->get();
                 
@@ -165,12 +165,12 @@ class SubscribersController extends Controller
                 $channel = $chan->first();
                 $channel_id = $channel->id;
 
-                $serv = DB::table('service_channel_table')->where('channel_id', 'LIKE', '%'.$channel_id.'%');
+                $serv = DB::table('service_channel_table')->where('channel_id', $channel_id);
                 if($serv->exists()){
                     $service = $serv->first();
                     $service_id = $service->id;
 
-                    $sub = Subscriber::where('service_id', 'LIKE', '%'.$service_id.'%')->where('user_id', $user_id);
+                    $sub = Subscriber::where('service_id', $service_id)->where('user_id', $user_id);
                     if($sub->exists()){
                         $subscribers = $sub->get();
 
@@ -215,7 +215,7 @@ class SubscribersController extends Controller
                 $service_cp_id = $service->user_id;
 
 
-                $subs = Unsubscriber::where('user_id', 'LIKE', '%'.$service_cp_id.'%');
+                $subs = Unsubscriber::where('user_id', $service_cp_id);
 
                 if($subs->exists()){
 
@@ -248,7 +248,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Unsubscriber::where('network_id', 'LIKE', '%'.$request->network.'%');
+                $sub = Unsubscriber::where('network_id', $request->network);
                 if($sub->exists()){
                     $unsubscribers = $sub->get();
 
@@ -339,7 +339,7 @@ class SubscribersController extends Controller
                 ]);
             }
 
-            $sub = Unsubscriber::where('network_id',  'LIKE', '%'.$network_id.'%')->where('user_id',  'LIKE', '%'.$service_cp_id.'%');
+            $sub = Unsubscriber::where('network_id', $network_id)->where('user_id', $service_cp_id);
             if($sub->exists()){
                 $unsubscribers = $sub->get();
                 
@@ -361,7 +361,7 @@ class SubscribersController extends Controller
                 $channel = $chan->first();
                 $channel_id = $channel->id;
 
-                $serv = DB::table('service_channel_table')->where('channel_id',  'LIKE', '%'.$channel_id.'%');
+                $serv = DB::table('service_channel_table')->where('channel_id', $channel_id);
                 if($serv->exists()){
                     $service = $serv->first();
                     $service_id = $service->id;
