@@ -20,7 +20,7 @@ class ChargingController extends Controller
                 $service_id = $service->id;
                 $telcoServiceId = $service->serviceId;
 
-                $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 2);
+                $char = Charging::where('serviceId', $telcoServiceId)->where('status', 2);
                 if($char->exists()){
                     $charging = $char->get();
 
@@ -50,7 +50,7 @@ class ChargingController extends Controller
                 $network = $net->first();
                 $network_id = $network->id;
 
-                $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 2);
+                $charg = Charging::where('network_id', $network_id)->where('status', 2);
                 if($charg->exists()){
                     $charging = $charg->get();
 
@@ -124,7 +124,7 @@ class ChargingController extends Controller
                 $service_id = $service->id;
                 $telcoServiceId = $service->serviceId;
 
-                $char = Charging::where('serviceId',  'LIKE', '%'.$telcoServiceId.'%')->where('status', 0)->orWhere('status', 1);
+                $char = Charging::where('serviceId', $telcoServiceId)->where('status', 0)->orWhere('status', 1);
                 if($char->exists()){
                     $charging = $char->get();
 
@@ -154,7 +154,7 @@ class ChargingController extends Controller
                 $network = $net->first();
                 $network_id = $network->id;
 
-                $charg = Charging::where('network_id',  'LIKE', '%'.$network_id.'%')->where('status', 0)->orWhere('status', 1);
+                $charg = Charging::where('network_id', $network_id)->where('status', 0)->orWhere('status', 1);
                 if($charg->exists()){
                     $charging = $charg->get();
 
