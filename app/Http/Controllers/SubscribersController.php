@@ -250,7 +250,7 @@ class SubscribersController extends Controller
             if($net->exists()){
                 $network = $net->first();
 
-                $sub = Unsubscriber::where('network_id', $network->id);
+                $sub = Unsubscriber::where('network_id', $network->id)->where('user_id', $user_id);
                 if($sub->exists()){
                     $unsubscribers = $sub->get();
 
@@ -274,7 +274,7 @@ class SubscribersController extends Controller
                 ]);
             }
         }elseif(isset($request->subscriber_address)){
-            $subs = Unsubscriber::where('callingParty', 'LIKE', '%'.$request->subscriber_address.'%');
+            $subs = Unsubscriber::where('callingParty', 'LIKE', '%'.$request->subscriber_address.'%')->where('user_id', $user_id);
             if($subs->exists()){
                 $unsubscribers = $subs->get();
 
@@ -293,7 +293,7 @@ class SubscribersController extends Controller
         }elseif(isset($request->to) && isset($request->fro)){
             $from = new Carbon($request->fro);
             $to = new Carbon($request->to);
-            $sub = Unsubscriber::whereBetween('created_at', [$from, $to]);
+            $sub = Unsubscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
             if($sub->exists()){
                 $subscribers = $sub->get();
 
@@ -412,70 +412,5 @@ class SubscribersController extends Controller
         }
     }
 
-    public function subscribersCount(Request $request){
-        $user = User::where('token', $request->header('token'))->first();
-        $user_id = $user->id;
-        $validator = Validator::make($request->all(), [
-            'fro'  => "required",
-            'to'  => "required",
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'required_fields' => $validator->errors()->all(),
-                'message' => 'Missing field(s)',
-                'status' => '500'
-            ]);
-        }
-        
-        $from = new Carbon($request->fro);
-        $to = new Carbon($request->to);
-        $sub = Subscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
-            if($sub->exists()){
-                $subscribersCount = $sub->get()->count();
-
-                return response()->json([
-                    'message' => 'Successful',
-                    'status' => '200',
-                    'data' => $subscribersCount
-                ]);
-            }else{
-                return response()->json([
-                    'message' => 'Successful',
-                    'status' => '200',
-                    'data' => []
-                ]);
-            }
-    }
-
-    public function unsubscribersCount(Request $request){
-        $validator = Validator::make($request->all(), [
-            'fro'  => "required",
-            'to'  => "required",
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'required_fields' => $validator->errors()->all(),
-                'message' => 'Missing field(s)',
-                'status' => '500'
-            ]);
-        }
-        $from = new Carbon($request->fro);
-        $to = new Carbon($request->to);
-        $sub = Unsubscriber::whereBetween('created_at', [$from, $to]);
-        if($sub->exists()){
-            $subscribersCount = $sub->get()->count();
-
-            return response()->json([
-                'message' => 'Successful',
-                'status' => '200',
-                'data' => $subscribersCount
-            ]);
-        }else{
-            return response()->json([
-                'message' => 'Successful',
-                'status' => '200',
-                'data' => []
-            ]);
-        }
-    }
+    
 }

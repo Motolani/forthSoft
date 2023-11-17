@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChargingController;
+use App\Http\Controllers\CountController;
 use App\Http\Controllers\IPController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ServicesController;
@@ -40,18 +41,22 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
     Route::post('/services', [ServicesController::class, 'getServices']);
     Route::post('/keywords', [ServicesController::class, 'getKeyword']);
     Route::post('/pricePoint', [ServicesController::class, 'getPricePoint']);
-    Route::post('/serviceCount', [ServicesController::class, 'countServices']);
     Route::post('/serviceChannels', [ServicesController::class, 'serviceChannels']);
 
     Route::post('/subscribers', [SubscribersController::class, 'getSubscribers']);
-    Route::post('/subscribersCount', [SubscribersController::class, 'subscribersCount']);
+    // Route::post('/subscribersCount', [SubscribersController::class, 'subscribersCount']);
     Route::post('/unsubscribers', [SubscribersController::class, 'getUnsubscribers']);
-    Route::post('/unsubscribersCount', [SubscribersController::class, 'unsubscribersCount']);
+    // Route::post('/unsubscribersCount', [SubscribersController::class, 'unsubscribersCount']);
 
     Route::post('/chargingSync', [ChargingController::class, 'chargingSync']);
     Route::post('/chargingUnsync', [ChargingController::class, 'chargingUnsync']);
-    Route::post('/chargingSyncCount', [ChargingController::class, 'chargingSyncCount']);
-    Route::post('/chargingUnsyncCount', [ChargingController::class, 'chargingUnsyncCount']);
+    // Route::post('/chargingSyncCount', [ChargingController::class, 'chargingSyncCount']);
+    // Route::post('/chargingUnsyncCount', [ChargingController::class, 'chargingUnsyncCount']);
 
+    Route::post('/count', [CountController::class, 'count']);
+    Route::post('/serviceCount', [CountController::class, 'countServices']);
+
+
+    Route::post('/ip-request', [IPController::class, 'IpRequest']);
 
 });

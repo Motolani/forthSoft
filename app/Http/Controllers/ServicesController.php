@@ -6,6 +6,7 @@ use App\Models\Network;
 use App\Models\PricePoint;
 use App\Models\Service;
 use App\Models\ServiceChannel;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,12 +17,15 @@ class ServicesController extends Controller
 {
     //services
     public function getServices(Request $request){
+        $user = User::where('token', $request->header('token'))->first();
+        $user_id = $user->id;
+
         if(isset($request->network)){
             $net = Network::where('network',  'LIKE', '%'.$request->network.'%');
             if($net->exists()){
                 $network = $net->first();
 
-                $serv = Service::where('network_id',  'LIKE', '%'.$network->id.'%');
+                $serv = Service::where('network_id', $network->id)->where('user_id', $user_id);
                 if($serv->exists()){
                     $services = $serv->get();
 
@@ -45,7 +49,7 @@ class ServicesController extends Controller
                 ]);
             }
         }elseif(isset($request->keyword)){
-            $serv = Service::where('keyword',  'LIKE', '%'.$request->keyword.'%');
+            $serv = Service::where('keyword',  'LIKE', '%'.$request->keyword.'%')->where('user_id', $user_id);
             if($serv->exists()){
                 $services = $serv->get();
 
@@ -65,7 +69,7 @@ class ServicesController extends Controller
 
             
                 $serv = PricePoint::join('services','services.id','price_point_table.id')
-                ->where('price_point_table.price',  'LIKE', '%'.$request->price_point.'%');
+                ->where('price_point_table.price',  'LIKE', '%'.$request->price_point.'%')->where('user_id', $user_id);
                 
             if($serv->exists()){
 
@@ -85,7 +89,7 @@ class ServicesController extends Controller
             }
         }else{
 
-            $services = Service::all();
+            $services = Service::where('user_id', $user_id)->all();
 
                 return response()->json([
                     'message' => 'Successful',
@@ -110,7 +114,7 @@ class ServicesController extends Controller
 
         $service_id = $request->service_id;
 
-        $key = DB::table('keyword')->where('service_id',  'LIKE', '%'.$service_id.'%');
+        $key = DB::table('keyword')->where('service_id', $service_id);
         if($key->exists()){
             $keyWord = $key->first();
 
@@ -139,7 +143,7 @@ class ServicesController extends Controller
                 $keyword = $key->first();
 
                 $priceCheck = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
-                ->where('price_point_table.keyword_id',  'LIKE', '%'.$keyword->id.'%');
+                ->where('price_point_table.keyword_id', $keyword->id);
 
                 if($priceCheck->exists()){
                     $pricePoint = $priceCheck->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')->get();
@@ -166,7 +170,7 @@ class ServicesController extends Controller
         }elseif(isset($request->price)){
 
             $priceCheck = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
-                ->where('price_point_table.price',  'LIKE', '%'.$request->price.'%');
+                ->where('price_point_table.price', $request->price);
 
             if($priceCheck->exists()){
                 $pricePoint = $priceCheck->select('price_point_table.id', 'price_point_table.price', 'price_point_table.service_id', 'keyword.name as keyword', 'price_point_table.period_type', 'price_point_table.created_at')->get();
@@ -191,7 +195,7 @@ class ServicesController extends Controller
 
 
                 $pp = PricePoint::join('keyword', 'keyword.id', 'price_point_table.keyword_id')
-                ->where('price_point_table.service_id',  'LIKE', '%'.$services->id.'%');
+                ->where('price_point_table.service_id', $services->id);
                 
 
                 if($pp->exists()){
@@ -230,46 +234,7 @@ class ServicesController extends Controller
     }
 
     //validate methods
-    public function countServices(Request $request){
-        if(isset($request->network)){
-            $net = Network::where('network',  'LIKE', '%'.$request->network.'%');
-            if($net->exists()){
-                $network = $net->first();
-
-                $serv = Service::where('network_id',  'LIKE', '%'.$network->id.'%');
-                if($serv->exists()){
-                    $servicesCount = $serv->count();
-
-                    return response()->json([
-                        'message' => 'Successful',
-                        'status' => '200',
-                        'data' => $servicesCount
-                    ]);
-                }else{
-                    return response()->json([
-                        'message' => 'Successful',
-                        'status' => '200',
-                        'data' => []
-                    ]);
-                }
-            }else{
-                return response()->json([
-                    'message' => 'Network Does not exist',
-                    'status' => '300',
-                    'data' => []
-                ]);
-            }
-        }else{
-
-            $servicesCount = Service::get()->count();
-
-                return response()->json([
-                    'message' => 'Successful',
-                    'status' => '200',
-                    'data' => $servicesCount
-                ]);
-        }
-    }
+    
 
     public function serviceChannels(Request $request){
         if(isset($request->channel)){
