@@ -116,14 +116,14 @@ class CountController extends Controller
                     return response()->json([
                         'message' => 'Successful',
                         'status' => '200',
-                        'data' => []
+                        'data' => Null
                     ]);
                 }
             }else{
                 return response()->json([
                     'message' => 'Network Does not exist',
                     'status' => '300',
-                    'data' => []
+                    'data' => Null
                 ]);
             }
         }else{
