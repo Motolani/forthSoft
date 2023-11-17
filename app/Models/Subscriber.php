@@ -17,5 +17,7 @@ class Subscriber extends Model
         'message',
         'created',
         'service_id',
+        'user_id',
+        'network_id',
     ];
 }

@@ -21,14 +21,15 @@ class SubscribersController extends Controller
         $user = User::where('token', $request->header('token'))->first();
         $user_id = $user->id;
         if(isset($request->service)){
+            Log::info('in here');
             $serv = Service::where('serviceName','LIKE', '%'.$request->service.'%');
             if($serv->exists()){
                 $service = $serv->first();
 
                 Log::info($service->id);
-                $subs = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                $subs = Subscriber::join('services', 'services.id', 'subscribers.service_id')
                 ->where('subscribers.service_id', $service->id)->where('subscribers.user_id', $user_id);
-
+                Log::info();
                 // $subs = Subscriber::where('service_id', $service->id)->where('user_id', $user_id);
                 if($subs->exists()){
                     $subscribers = $subs->select('subscribers.*', 'services.serviceName')->get();
@@ -59,7 +60,7 @@ class SubscribersController extends Controller
 
             if($net->exists()){
                 $network = $net->first();
-                $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                $sub = Subscriber::join('services', 'services.id', 'subscribers.service_id')
                 ->where('subscribers.service_id', $network->id)->where('subscribers.user_id', $user_id);
                 // $sub = Subscriber::where('network_id', $network->id)->where('user_id', $user_id);
                 if($sub->exists()){
@@ -85,7 +86,7 @@ class SubscribersController extends Controller
                 ]);
             }
         }elseif(isset($request->subscriber_address)){
-            $subs = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+            $subs = Subscriber::join('services', 'services.id', 'subscribers.service_id')
                 ->where('subscribers.senderAddress', 'LIKE', '%'.$request->subscriber_address.'%')->where('subscribers.user_id', $user_id);
             // $subs = Subscriber::where('senderAddress', 'LIKE', '%'.$request->subscriber_address.'%')->where('user_id', $user_id);
             if($subs->exists()){
@@ -106,9 +107,12 @@ class SubscribersController extends Controller
         }elseif(isset($request->to) && isset($request->fro)){
             $from = new Carbon($request->fro);
             $to = new Carbon($request->to);
-            $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
-                ->whereBetween('subscribers.created_at', [$from, $to])->where('subscribers.user_id', $user_id);
-            // $sub = Subscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
+            // $subs = Subscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id)->get();
+            // $subs = Subscriber::join('services', 'services.id', 'subscribers.service_id')->get();
+            // dd($subs);
+            $sub = Subscriber::join('services', 'services.id', 'subscribers.service_id')
+                    ->whereBetween('subscribers.created_at', [$from, $to])
+                    ->where('subscribers.user_id', $user_id);
             if($sub->exists()){
                 $subscribers = $sub->select('subscribers.*', 'services.serviceName')->get();
 
@@ -152,7 +156,7 @@ class SubscribersController extends Controller
                 ]);
             }
 
-            $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+            $sub = Subscriber::join('services', 'services.id', 'subscribers.service_id')
                 ->where('subscribers.network_id', $network_id)->where('subscribers.service_id', $service_id)->where('subscribers.user_id', $user_id);
             // $sub = Subscriber::where('network_id', $network_id)->where('service_id', $service_id)->where('user_id', $user_id);
             if($sub->exists()){
@@ -181,7 +185,7 @@ class SubscribersController extends Controller
                     $service = $serv->first();
                     $service_id = $service->id;
 
-                    $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                    $sub = Subscriber::join('services', 'services.id', 'subscribers.service_id')
                     ->where('subscribers.service_id', $service_id)->where('subscribers.user_id', $user_id);
                     // $sub = Subscriber::where('service_id', $service_id)->where('user_id', $user_id);
                     if($sub->exists()){
