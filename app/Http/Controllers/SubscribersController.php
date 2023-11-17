@@ -26,10 +26,12 @@ class SubscribersController extends Controller
                 $service = $serv->first();
 
                 Log::info($service->id);
+                $subs = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                ->where('service_id', $service->id)->where('user_id', $user_id);
 
-                $subs = Subscriber::where('service_id', $service->id)->where('user_id', $user_id);
+                // $subs = Subscriber::where('service_id', $service->id)->where('user_id', $user_id);
                 if($subs->exists()){
-                    $subscribers = $subs->get();
+                    $subscribers = $subs->select('subscribers.*', 'services.serviceName')->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -57,10 +59,11 @@ class SubscribersController extends Controller
 
             if($net->exists()){
                 $network = $net->first();
-
-                $sub = Subscriber::where('network_id', $network->id)->where('user_id', $user_id);
+                $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                ->where('service_id', $network->id)->where('user_id', $user_id);
+                // $sub = Subscriber::where('network_id', $network->id)->where('user_id', $user_id);
                 if($sub->exists()){
-                    $subscribers = $sub->get();
+                    $subscribers = $sub->select('subscribers.*', 'services.serviceName')->get();
 
                     return response()->json([
                         'message' => 'Successful',
@@ -82,9 +85,11 @@ class SubscribersController extends Controller
                 ]);
             }
         }elseif(isset($request->subscriber_address)){
-            $subs = Subscriber::where('senderAddress', 'LIKE', '%'.$request->subscriber_address.'%')->where('user_id', $user_id);
+            $subs = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                ->where('senderAddress', 'LIKE', '%'.$request->subscriber_address.'%')->where('user_id', $user_id);
+            // $subs = Subscriber::where('senderAddress', 'LIKE', '%'.$request->subscriber_address.'%')->where('user_id', $user_id);
             if($subs->exists()){
-                $subscribers = $subs->get();
+                $subscribers = $subs->select('subscribers.*', 'services.serviceName')->get();
 
                 return response()->json([
                     'message' => 'Successful',
@@ -101,9 +106,11 @@ class SubscribersController extends Controller
         }elseif(isset($request->to) && isset($request->fro)){
             $from = new Carbon($request->fro);
             $to = new Carbon($request->to);
-            $sub = Subscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
+            $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                ->whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
+            // $sub = Subscriber::whereBetween('created_at', [$from, $to])->where('user_id', $user_id);
             if($sub->exists()){
-                $subscribers = $sub->get();
+                $subscribers = $sub->select('subscribers.*', 'services.serviceName')->get();
 
                 return response()->json([
                     'message' => 'Successful',
@@ -145,7 +152,9 @@ class SubscribersController extends Controller
                 ]);
             }
 
-            $sub = Subscriber::where('network_id', $network_id)->where('service_id', $service_id)->where('user_id', $user_id);
+            $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                ->where('network_id', $network_id)->where('service_id', $service_id)->where('user_id', $user_id);
+            // $sub = Subscriber::where('network_id', $network_id)->where('service_id', $service_id)->where('user_id', $user_id);
             if($sub->exists()){
                 $subscribers = $sub->get();
                 
@@ -172,9 +181,11 @@ class SubscribersController extends Controller
                     $service = $serv->first();
                     $service_id = $service->id;
 
-                    $sub = Subscriber::where('service_id', $service_id)->where('user_id', $user_id);
+                    $sub = Subscriber::Join('services', 'services.id', 'subscribers.service_id')
+                    ->where('service_id', $service_id)->where('user_id', $user_id);
+                    // $sub = Subscriber::where('service_id', $service_id)->where('user_id', $user_id);
                     if($sub->exists()){
-                        $subscribers = $sub->get();
+                        $subscribers = $sub->select('subscribers.*', 'services.serviceName')->get();
 
                         return response()->json([
                             'message' => 'Successful',
