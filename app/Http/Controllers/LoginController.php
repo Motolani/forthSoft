@@ -192,4 +192,136 @@ class LoginController extends Controller
             ]);
         }   
     }
+
+    public function activateTwoFA(Request $request){
+        $validator = Validator::make($request->all(), [
+            'twoFA'  => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        if($request->twoFA == 1){
+            $user = User::where('token', $request->header('token'))->first();
+            $user_id = $user->id;
+
+            $user = User::where('id', $user_id);
+            $userInfo = $user->get();
+            if($userInfo->twoFa == 1){
+                return response()->json([
+                    'status' => 300,
+                    'message' => '2FA Already Activated',             
+                ]);
+            }
+
+            $user->update([
+                'twoFa' => $request->twoFA
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => '2FA Successfully Activate',
+            ]);
+        }elseif($request->twoFA == 0){
+            $user = User::where('token', $request->header('token'))->first();
+            $user_id = $user->id;
+
+            $user = User::where('id', $user_id);
+            $userInfo = $user->get();
+            if($userInfo->twoFa == 0){
+                return response()->json([
+                    'status' => 300,
+                    'message' => '2FA Already Deactivated',             
+                ]);
+            }
+
+            $user->update([
+                'twoFa' => $request->twoFA
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => '2FA Successfully deactivate',
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => 300,
+                'message' => 'Invalid Value passed',
+            ]);
+        }
+    }
+
+    public function twoFAToken(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email'  => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        $use = User::where('email', $request->email);
+        if($use->exists()){
+            $token = rand(100, 999);
+            $use->update([
+                'twoFa_token' => $token
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => '2FA Token Successfully Generated',
+                'data' => $token
+            ]);
+        }else{
+            return response()->json([
+                'status' => 300,
+                'message' => 'Invalid Email',
+                'data' => ''
+            ]);
+        }
+    }
+
+    public function twoFACheck(Request $request){
+        $validator = Validator::make($request->all(), [
+            'twoFatoken'  => "required",
+            'email'  => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'required_fields' => $validator->errors()->all(),
+                'message' => 'Missing field(s)',
+                'status' => '500'
+            ]);
+        }
+
+        $use = User::where('email', $request->email);
+        if($use->exists()){
+            $user = $use->first();
+            
+            if($user->twoFa_token == $request->twoFatoken){
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Token Match',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => 300,
+                    'message' => 'Token Mismatch',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status' => 300,
+                'message' => 'Invalid Email',
+             ]);
+        }
+    }
 }

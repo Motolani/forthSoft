@@ -240,4 +240,26 @@ class IPController extends Controller
             'message' => 'Ip Request Successfully Logged',
         ]);
     }
+
+    public function viewRequest(Request $request){
+        $user = User::where('token', $request->header('token'))->first();
+        $user_id = $user->id;
+
+        $ipReq = IpRequest::where('user_id', $user_id);
+        if($ipReq->exists()){
+            $req = $ipReq->get();
+            return response()->json([
+                'message' => 'Successful',
+                'status' => '200',
+                'data' => $req
+            ]);
+        }else{
+            return response()->json([
+                'message' => 'Successful',
+                'status' => '200',
+                'data' => []
+            ]);
+        }
+    }
+
 }

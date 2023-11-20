@@ -55,5 +55,8 @@ Route::group(['middleware' => ['AuthCheckApi']], function () {
 
 
     Route::post('/ip-request', [IPController::class, 'IpRequest']);
+    Route::post('/activate-two-FA', [LoginController::class, 'activateTwoFA']);
+    Route::post('/two-FA-token', [LoginController::class, 'twoFAToken']);
+    Route::post('/two-FA-check', [LoginController::class, 'twoFACheck']);
 
 });

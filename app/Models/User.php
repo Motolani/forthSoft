@@ -22,6 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
         'apiKey',
+        'apiKey',
+        'twoFa',
+        'twoFa_token',
         'token',
         'token_time',
     ];
